@@ -13,10 +13,10 @@ response = requests.get(requests_url, params=params)
 if response:
     data = response.json()
     toponym = data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']
-    toponym_address = toponym['metaDataProperty']['GeocoderMetaData']['text']
+    # toponym_address = toponym['metaDataProperty']['GeocoderMetaData']['text']
     toponym_coordinates = toponym['Point']['pos']
-    lan, lat = map(float, toponym_coordinates.split())
-    print(f'{toponym_address} has coordinates: {toponym_coordinates}')
+    # lan, lat = map(float, toponym_coordinates.split())
+    # print(f'{toponym_address} has coordinates: {toponym_coordinates}')
     razmer = [600, 450]
 
 
@@ -27,7 +27,9 @@ if response:
             self.initUI()
 
         def getImage(self):
-            map_request = f"http://static-maps.yandex.ru/1.x/?ll={','.join((toponym_coordinates).split())}&spn=0.002,0.002&l=map"
+            url = 'http://static-maps.yandex.ru/1.x/?ll='
+            maschtab = '0.002'
+            map_request = f"{url}{','.join((toponym_coordinates).split())}&spn={maschtab},{maschtab}&l=map"
             response = requests.get(map_request)
 
             if not response:
