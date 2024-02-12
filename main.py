@@ -1,6 +1,6 @@
 import os
 import sys
-
+from PyQt5.QtCore import Qt
 import requests
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
@@ -23,13 +23,13 @@ if response:
     class Example(QWidget):
         def __init__(self):
             super().__init__()
+            self.maschtab = 0.002
             self.getImage()
             self.initUI()
 
         def getImage(self):
             url = 'http://static-maps.yandex.ru/1.x/?ll='
-            maschtab = '0.002'
-            map_request = f"{url}{','.join((toponym_coordinates).split())}&spn={maschtab},{maschtab}&l=map"
+            map_request = f"{url}{','.join((toponym_coordinates).split())}&spn={str(self.maschtab)},{str(self.maschtab)}&l=map"
             response = requests.get(map_request)
 
             if not response:
@@ -52,6 +52,19 @@ if response:
 
         def closeEvent(self, event):
             os.remove(self.map_file)
+
+        def keyPressEvent(self, event):
+            if event.key() == Qt.Key_Up and self.maschtab < 10:
+                self.maschtab += 0.005
+                print(333)
+            if event.key() == Qt.Key_Down and self.maschtab > 0.006:
+                self.maschtab -= 0.005
+            self.getImage()
+            self.izmenenie()
+
+        def izmenenie(self):
+            self.pixmap = QPixmap(self.map_file)
+            self.image.setPixmap(self.pixmap)
 
 
     if __name__ == '__main__':
