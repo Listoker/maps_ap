@@ -54,10 +54,9 @@ if response:
             os.remove(self.map_file)
 
         def keyPressEvent(self, event):
-            if event.key() == Qt.Key_Up and self.maschtab < 10:
+            if event.key() == Qt.Key_PageUp and self.maschtab < 10:
                 self.maschtab += 0.005
-                print(333)
-            if event.key() == Qt.Key_Down and self.maschtab > 0.006:
+            if event.key() == Qt.Key_PageDown and self.maschtab > 0.006:
                 self.maschtab -= 0.005
             self.getImage()
             self.izmenenie()
