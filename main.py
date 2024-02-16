@@ -24,12 +24,14 @@ if response:
         def __init__(self):
             super().__init__()
             self.maschtab = 0.002
+            self.mnogitel = 0
+            self.toponym_coordinates = toponym_coordinates
             self.getImage()
             self.initUI()
 
         def getImage(self):
             url = 'http://static-maps.yandex.ru/1.x/?ll='
-            map_request = f"{url}{','.join((toponym_coordinates).split())}&spn={str(self.maschtab)},{str(self.maschtab)}&l=map"
+            map_request = f"{url}{','.join((self.toponym_coordinates).split())}&spn={str(self.maschtab)},{str(self.maschtab)}&l=map"
             response = requests.get(map_request)
 
             if not response:
@@ -54,10 +56,40 @@ if response:
             os.remove(self.map_file)
 
         def keyPressEvent(self, event):
-            if event.key() == Qt.Key_PageUp and self.maschtab < 10:
+            if event.key() == Qt.Key_PageUp and self.maschtab < 30:
                 self.maschtab += 0.005
+                self.mnogitel += 1
             if event.key() == Qt.Key_PageDown and self.maschtab > 0.006:
                 self.maschtab -= 0.005
+                self.mnogitel -= 1
+            if event.key() == Qt.Key_Up:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) + 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) + 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_Down:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) - 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) - 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_Right:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) + 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) + 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_Left:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) - 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) - 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
             self.getImage()
             self.izmenenie()
 
