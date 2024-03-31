@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import Qt
 import requests
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton
 
 requests_url = "http://geocode-maps.yandex.ru/1.x"
 params = {'apikey': '40d1649f-0493-4b70-98ba-98533de7710b',
@@ -25,13 +25,14 @@ if response:
             super().__init__()
             self.maschtab = 0.002
             self.mnogitel = 0
+            self.karta = 'map'
             self.toponym_coordinates = toponym_coordinates
             self.getImage()
             self.initUI()
 
         def getImage(self):
             url = 'http://static-maps.yandex.ru/1.x/?ll='
-            map_request = f"{url}{','.join((self.toponym_coordinates).split())}&spn={str(self.maschtab)},{str(self.maschtab)}&l=map"
+            map_request = f"{url}{','.join((self.toponym_coordinates).split())}&spn={str(self.maschtab)},{str(self.maschtab)}&l={self.karta}"
             response = requests.get(map_request)
 
             if not response:
@@ -51,6 +52,36 @@ if response:
             self.image.move(0, 0)
             self.image.resize(600, 450)
             self.image.setPixmap(self.pixmap)
+
+            self.order_btn = QPushButton('Схема', self)
+            self.order_btn.resize(100, 50)
+            self.order_btn.move(0, 0)
+            self.order_btn.clicked.connect(self.carta1)
+
+            self.order_btn = QPushButton('Спутник', self)
+            self.order_btn.resize(100, 50)
+            self.order_btn.move(0, 50)
+            self.order_btn.clicked.connect(self.carta2)
+
+            self.order_btn = QPushButton('Гибрид', self)
+            self.order_btn.resize(100, 50)
+            self.order_btn.move(0, 100)
+            self.order_btn.clicked.connect(self.carta3)
+
+        def carta1(self):
+            self.karta = 'map'
+            self.getImage()
+            self.izmenenie()
+
+        def carta2(self):
+            self.karta = 'sat'
+            self.getImage()
+            self.izmenenie()
+
+        def carta3(self):
+            self.karta = 'sat,skl'
+            self.getImage()
+            self.izmenenie()
 
         def closeEvent(self, event):
             os.remove(self.map_file)
