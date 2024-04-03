@@ -87,6 +87,7 @@ if response:
             os.remove(self.map_file)
 
         def keyPressEvent(self, event):
+            print(23)
             if event.key() == Qt.Key_PageUp and self.maschtab < 30:
                 self.maschtab += 0.005
                 self.mnogitel += 1
@@ -115,6 +116,34 @@ if response:
                     self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) + 0.003)
                 self.toponym_coordinates = ' '.join(self.toponym_coordinates)
             if event.key() == Qt.Key_Left:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) - 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) - 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_W:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) + 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) + 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_S:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) - 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[1] = str(float(self.toponym_coordinates[1]) - 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_D:
+                self.toponym_coordinates = self.toponym_coordinates.split()
+                if self.mnogitel != 0:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) + 0.003 * self.mnogitel * 4)
+                else:
+                    self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) + 0.003)
+                self.toponym_coordinates = ' '.join(self.toponym_coordinates)
+            if event.key() == Qt.Key_A:
                 self.toponym_coordinates = self.toponym_coordinates.split()
                 if self.mnogitel != 0:
                     self.toponym_coordinates[0] = str(float(self.toponym_coordinates[0]) - 0.003 * self.mnogitel * 4)
